@@ -1,6 +1,7 @@
 import 'package:movie_app/domain/entities/movie_entity.dart';
 
 class MovieModel extends MovieEntity {
+  final String originalTitle;  // Thêm dòng này
   final String mediaType;
   final bool adult;
   final String originalLanguage;
@@ -12,35 +13,28 @@ class MovieModel extends MovieEntity {
   const MovieModel({
     required int id,
     required String title,
-    required String originalTitle,
+    required this.originalTitle,  // Cập nhật constructor
     required String overview,
     required String posterPath,
     required String backdropPath,
-    required String mediaType,
-    required bool adult,
-    required String originalLanguage,
-    required List<int> genreIds,
-    required double popularity,
+    required this.mediaType,
+    required this.adult,
+    required this.originalLanguage,
+    required this.genreIds,
+    required this.popularity,
     required String releaseDate,
-    required bool video,
+    required this.video,
     required double voteAverage,
-    required int voteCount,
-  }) : this.mediaType = mediaType,
-        this.adult = adult,
-        this.originalLanguage = originalLanguage,
-        this.genreIds = genreIds,
-        this.popularity = popularity,
-        this.video = video,
-        this.voteCount = voteCount,
-        super(
-        id: id,
-        title: title,
-        backdropPath: backdropPath,
-        voteAverage: voteAverage,
-        releaseDate: releaseDate,
-        overview: overview,
-        posterPath: posterPath,
-      );
+    required this.voteCount,
+  }) : super(
+    id: id,
+    title: title,
+    backdropPath: backdropPath,
+    voteAverage: voteAverage,
+    releaseDate: releaseDate,
+    overview: overview,
+    posterPath: posterPath,
+  );
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
     return MovieModel(

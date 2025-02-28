@@ -1,13 +1,13 @@
 import 'movie_model.dart';
 
-class MovieResultModel {
-  final List<MovieModel> results;
+class MoviesResultModel {
+  final List<MovieModel> movies;
 
-  MovieResultModel({required this.results});
+  MoviesResultModel({required this.movies});
 
-  factory MovieResultModel.fromJson(Map<String, dynamic> json) {
-    return MovieResultModel(
-      results: (json['results'] as List<dynamic>?)
+  factory MoviesResultModel.fromJson(Map<String, dynamic> json) {
+    return MoviesResultModel(
+      movies: (json['results'] as List<dynamic>?)
           ?.map((item) => MovieModel.fromJson(item))
           .toList() ?? [],
     );
@@ -15,7 +15,7 @@ class MovieResultModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'results': results.map((v) => v.toJson()).toList(),
+      'results': movies.map((v) => v.toJson()).toList(),
     };
   }
 }
