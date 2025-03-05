@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:movie_app/domain/entities/app_error.dart';
 import 'package:movie_app/domain/entities/movie_entity.dart';
 import '../../domain/repositores/movie_repository.dart';
 import '../data_sources/movie_remote_data_source.dart';
@@ -8,12 +10,42 @@ class MovieRepositoryImpl extends MovieRepository {
   MovieRepositoryImpl(this.remoteDataSource); // ✅ Khởi tạo đúng cách
 
   @override
-  Future<List<MovieEntity>> getTrending() async {
+  Future<Either<AppError, List<MovieEntity>>> getTrending() async {
     try {
       final movies = await remoteDataSource.getTrending();
-      return movies;
-    } catch (e) {
-      throw Exception("Failed to fetch trending movies: $e"); // ✅ Xử lý lỗi đúng cách
+      return Right(movies);
+    } on Exception{
+      return Left(AppError('Something went wrong'));
+    }
+  }
+
+  @override
+  Future<Either<AppError, List<MovieEntity>>> getComingSoon() async{
+    try {
+      final movies = await remoteDataSource.getComingSoon();
+      return Right(movies);
+    } on Exception{
+      return Left(AppError('Something went wrong'));
+    }
+  }
+
+  @override
+  Future<Either<AppError, List<MovieEntity>>> getPlayingNow() async{
+    try {
+      final movies = await remoteDataSource.getPlayingNow();
+      return Right(movies);
+    } on Exception{
+      return Left(AppError('Something went wrong'));
+    }
+  }
+
+  @override
+  Future<Either<AppError, List<MovieEntity>>> getPopular() async{
+    try {
+      final movies = await remoteDataSource.getPopular();
+      return Right(movies);
+    } on Exception{
+      return Left(AppError('Something went wrong'));
     }
   }
 }
