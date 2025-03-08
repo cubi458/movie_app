@@ -4,6 +4,8 @@ import 'package:movie_app/di/get_it.dart';
 // import 'package:movie_app/presentation/blocs/movie_backdrop/movie_backdrop_bloc.dart';
 import 'package:movie_app/presentation/blocs/movie_carousel/movie_carousel_bloc.dart';
 
+import 'movie_carousel/movie_carousel_widget.dart';
+
 // import 'movie_carousel/movie_carousel_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -52,10 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   FractionallySizedBox(
                     alignment: Alignment.topCenter,
                     heightFactor: 0.6,
-                    // child: MovieCarouselWidget(
-                    //   movies: state.movies,
-                    //   defaultIndex: state.defaultIndex,
-                    // ),
+                    child: MovieCarouselWidget(
+                      movies: state.movies,
+                      defaultIndex: state.defaultIndex,
+                    ),
                   ),
                   FractionallySizedBox(
                     alignment: Alignment.bottomCenter,
