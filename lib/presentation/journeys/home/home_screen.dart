@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/di/get_it.dart';
-// import 'package:movie_app/presentation/blocs/movie_backdrop/movie_backdrop_bloc.dart';
+import 'package:movie_app/presentation/blocs/movie_backdrop/movie_backdrop_bloc.dart';
 import 'package:movie_app/presentation/blocs/movie_carousel/movie_carousel_bloc.dart';
 
+import '../../blocs/movie_backdrop/movie_backdrop_bloc.dart';
+import 'movie_carousel/movie_backdrop_widget.dart';
 import 'movie_carousel/movie_carousel_widget.dart';
 
 // import 'movie_carousel/movie_carousel_widget.dart';
@@ -15,13 +17,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late MovieCarouselBloc movieCarouselBloc;
-  // MovieBackdropBloc movieBackdropBloc;
+  late MovieBackdropBloc movieBackdropBloc;
 
   @override
   void initState() {
     super.initState();
     movieCarouselBloc = getItInstance<MovieCarouselBloc>();
-    // movieBackdropBloc = movieCarouselBloc.movieBackdropBloc;
+    movieBackdropBloc = movieCarouselBloc.movieBackdropBloc;
     movieCarouselBloc.add(CarouselLoadEvent());
   }
 
@@ -29,19 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     super.dispose();
     movieCarouselBloc?.close();
-    // movieBackdropBloc?.close();
+    movieBackdropBloc?.close();
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => movieCarouselBloc,
-        ),
-        // BlocProvider(
-        //   create: (context) => movieBackdropBloc,
-        // )
+        BlocProvider(create: (context) => movieCarouselBloc),
+        BlocProvider(create: (context) => movieBackdropBloc),
       ],
       child: Scaffold(
         body: BlocBuilder<MovieCarouselBloc, MovieCarouselState>(
@@ -51,6 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
               return Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
+                  FractionallySizedBox(
+                    alignment: Alignment.topCenter,
+                    heightFactor: 0.65, // Điều chỉnh để backdrop ngắn hơn
+                    child: MovieBackdropWidget(),
+                  ),
+
                   FractionallySizedBox(
                     alignment: Alignment.topCenter,
                     heightFactor: 0.6,

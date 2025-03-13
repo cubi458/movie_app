@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/common/constants/size_constants.dart';
 import 'package:movie_app/common/extensions/size_extensions.dart';
-import '../../../../data/core/api_constant.dart';
+import '../../../../data/core/api_constants.dart';
 
 class MovieCardWidget extends StatelessWidget {
   final int movieId;

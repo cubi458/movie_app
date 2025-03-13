@@ -1,6 +1,6 @@
 import 'dart:convert'; // Thêm để sử dụng json.decode()
 import 'package:http/http.dart' as http;
-import 'package:movie_app/data/core/api_constant.dart';
+import 'package:movie_app/data/core/api_constants.dart';
 
 class ApiClient {
   final http.Client _client;

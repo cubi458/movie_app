@@ -6,6 +6,7 @@ import 'package:movie_app/domain/usecases/get_coming_soon.dart';
 import 'package:movie_app/domain/usecases/get_playing_now.dart';
 import 'package:movie_app/domain/usecases/get_popular.dart';
 import 'package:movie_app/domain/usecases/get_trending.dart';
+import 'package:movie_app/presentation/blocs/movie_backdrop/movie_backdrop_bloc.dart';
 import 'package:movie_app/presentation/blocs/movie_carousel/movie_carousel_bloc.dart';
 
 import '../data/repositories/movie_repository_imple.dart';
@@ -13,30 +14,41 @@ import '../domain/repositores/movie_repository.dart';
 
 final getItInstance = GetIt.I;
 
-Future init() async{
+Future init() async {
   getItInstance.registerLazySingleton<Client>(() => Client());
-
   getItInstance.registerLazySingleton<ApiClient>(() => ApiClient(getItInstance()));
-
   getItInstance.registerLazySingleton<MovieRemoteDataSource>(
-      () => MovieRemoteDataSourceImpl(getItInstance()));
+        () => MovieRemoteDataSourceImpl(getItInstance()),
+  );
 
-  // ⚠️ ĐĂNG KÝ MovieRepository TRƯỚC khi gọi UseCase
-  getItInstance
-      .registerLazySingleton<MovieRepository>(() => MovieRepositoryImpl(getItInstance<MovieRemoteDataSource>()));
+  // ✅ Đăng ký MovieRepository CHỈ MỘT LẦN
+  getItInstance.registerLazySingleton<MovieRepository>(
+        () => MovieRepositoryImpl(getItInstance<MovieRemoteDataSource>()),
+  );
 
-  getItInstance
-    .registerLazySingleton<GetTrending>(() => GetTrending(getItInstance()));
-  getItInstance
-      .registerLazySingleton<GetPopular>(() => GetPopular(getItInstance()));
-  getItInstance
-      .registerLazySingleton<GetPlayingNow>(() => GetPlayingNow(getItInstance()));
-  getItInstance
-      .registerLazySingleton<GetComingSoon>(() => GetComingSoon(getItInstance()));
-  getItInstance
-      .registerFactory(
-      () => MovieCarouselBloc(
-        getTrending: getItInstance(),
-      )
+  getItInstance.registerLazySingleton<GetTrending>(
+        () => GetTrending(getItInstance()),
+  );
+  getItInstance.registerLazySingleton<GetPopular>(
+        () => GetPopular(getItInstance()),
+  );
+  getItInstance.registerLazySingleton<GetPlayingNow>(
+        () => GetPlayingNow(getItInstance()),
+  );
+  getItInstance.registerLazySingleton<GetComingSoon>(
+        () => GetComingSoon(getItInstance()),
+  );
+
+  // ✅ Chỉ đăng ký MovieBackdropBloc một lần
+  getItInstance.registerFactory<MovieBackdropBloc>(
+        () => MovieBackdropBloc(),
+  );
+
+  // ✅ Truyền MovieBackdropBloc vào MovieCarouselBloc
+  getItInstance.registerFactory<MovieCarouselBloc>(
+        () => MovieCarouselBloc(
+      getTrending: getItInstance(),
+      movieBackdropBloc: getItInstance(), // 🔥 Truyền MovieBackdropBloc vào
+    ),
   );
 }
