@@ -5,6 +5,8 @@ import 'package:movie_app/presentation/widgets/movie_app_bar.dart';
 // import 'movie_backdrop_widget.dart';
 // import 'movie_data_widget.dart';
 // import 'separator.dart';
+import '../../../widgets/separator.dart';
+import 'movie_data_widget.dart';
 import 'movie_page_view.dart';
 
 class MovieCarouselWidget extends StatelessWidget {
@@ -31,8 +33,8 @@ class MovieCarouselWidget extends StatelessWidget {
               movies: movies,
               initialPage: defaultIndex,
             ),
-            // MovieDataWidget(),
-            // Separator(),
+            MovieDataWidget(),
+            Separator(),
           ],
         ),
       ],
