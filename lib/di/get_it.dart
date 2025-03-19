@@ -8,6 +8,7 @@ import 'package:movie_app/domain/usecases/get_popular.dart';
 import 'package:movie_app/domain/usecases/get_trending.dart';
 import 'package:movie_app/presentation/blocs/movie_backdrop/movie_backdrop_bloc.dart';
 import 'package:movie_app/presentation/blocs/movie_carousel/movie_carousel_bloc.dart';
+import 'package:movie_app/presentation/blocs/movie_tabbed/movie_tabbed_bloc.dart';
 
 import '../data/repositories/movie_repository_imple.dart';
 import '../domain/repositores/movie_repository.dart';
@@ -51,4 +52,9 @@ Future init() async {
       movieBackdropBloc: getItInstance(), // 🔥 Truyền MovieBackdropBloc vào
     ),
   );
+  getItInstance.registerFactory(()=> MovieTabbedBloc(
+      getPopular: GetPopular(getItInstance()),
+      getPlayingNow: GetPlayingNow(getItInstance()),
+      getComingSoon: GetComingSoon(getItInstance()),
+  ));
 }
