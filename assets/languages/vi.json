@@ -5,5 +5,8 @@
   "about": "Giới thiệu",
   "popular": "PHỔ BIẾN",
   "now": "HIỆN TẠI",
-  "soon": "SẮP CÓ"
+  "soon": "SẮP CÓ",
+  "okay": "Đồng ý",
+  "aboutDescription": "Ứng dụng này sử dụng TMDb API nhưng không thuộc sở hữu hoặc được chứng nhận bởi TMDb"
+
 }

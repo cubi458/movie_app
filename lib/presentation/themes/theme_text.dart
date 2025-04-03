@@ -32,6 +32,7 @@ class ThemeText {
   // Hàm lấy TextTheme tùy chỉnh
   static TextTheme getTextTheme() => TextTheme(
     titleLarge: _whiteTitleLarge, // Sử dụng titleLarge thay vì headline6
+
   );
 }
 
