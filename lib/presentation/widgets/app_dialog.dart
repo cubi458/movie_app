@@ -4,6 +4,7 @@ import 'package:movie_app/common/constants/translation_constants.dart';
 import 'package:movie_app/common/extensions/size_extensions.dart';
 import 'package:movie_app/common/extensions/string_extensions.dart';
 import 'package:movie_app/presentation/themes/theme_color.dart';
+import 'package:movie_app/presentation/widgets/button.dart';
 
 
 class AppDialog extends StatelessWidget {
@@ -34,7 +35,7 @@ class AppDialog extends StatelessWidget {
         children: [
           Text(
               title.t(context),
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: Sizes.dimen_6.h.toDouble()),
@@ -43,10 +44,17 @@ class AppDialog extends StatelessWidget {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
             ),
+          ),
+          if(image != null) image,
+          Button(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            text: TranslationConstants.okay,
           )
         ],
       )
-
+  
     );
   }
 }

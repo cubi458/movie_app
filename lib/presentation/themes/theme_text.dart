@@ -7,12 +7,10 @@ import 'package:movie_app/presentation/themes/theme_color.dart';
 class ThemeText {
   const ThemeText._();
 
-  // Khai báo TextTheme sử dụng GoogleFonts Poppins
   static TextTheme get _poppinsTextTheme => GoogleFonts.poppinsTextTheme();
 
-  // Khai báo text style cho titleLarge
   static TextStyle get _whiteTitleLarge => _poppinsTextTheme.titleLarge!.copyWith(
-    fontSize: Sizes.dimen_20.sp.toDouble(), // Ép kiểu num -> double
+    fontSize: Sizes.dimen_20.sp.toDouble(),
     color: Colors.white,
   );
 
@@ -20,8 +18,16 @@ class ThemeText {
     fontSize: Sizes.dimen_16.sp.toDouble(),
     color: Colors.white,
   );
+  static TextStyle get _whiteButton => _poppinsTextTheme.labelLarge!.copyWith(
+    fontSize: Sizes.dimen_14.sp.toDouble(),
+    color: Colors.white,
+  );
+  static TextStyle get _whiteHeadline => _poppinsTextTheme.headlineSmall!.copyWith(
+    fontSize: Sizes.dimen_24.sp.toDouble(),
+    color: Colors.white,
+  );
 
-  static TextStyle get whiteBodyText2 => _poppinsTextTheme.bodyMedium!.copyWith(
+  static TextStyle get whiteBodyText => _poppinsTextTheme.bodyMedium!.copyWith(
     color: Colors.white,
     fontSize: Sizes.dimen_14.sp.toDouble(),
     wordSpacing: 0.25,
@@ -29,19 +35,18 @@ class ThemeText {
     height: 1.5,
   );
 
-  // Hàm lấy TextTheme tùy chỉnh
   static TextTheme getTextTheme() => TextTheme(
-    titleLarge: _whiteTitleLarge, // Sử dụng titleLarge thay vì headline6
-
+    titleLarge: _whiteTitleLarge,
+    headlineSmall: _whiteHeadline,
+    bodyMedium: whiteBodyText,
+    titleMedium: whiteSubtitle1,
+    labelLarge: _whiteButton,
   );
 }
 
-// ✅ Sửa lỗi và chỉ giữ một extension duy nhất
 extension ThemeTextExtension on TextTheme {
-  TextStyle get royalBlueSubtitle1 => titleMedium!.copyWith( // 🔥 Thay subtitle1 -> titleMedium
+  TextStyle get royalBlueSubtitle1 => titleMedium!.copyWith(
     color: AppColor.royalBlue,
     fontWeight: FontWeight.w600,
   );
 }
-
-
