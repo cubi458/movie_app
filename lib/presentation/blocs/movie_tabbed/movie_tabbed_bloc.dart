@@ -32,7 +32,8 @@ class MovieTabbedBloc extends Bloc<MovieTabbedEvent, MovieTabbedState> {
   Future<void> _onMovieTabChangedEvent(
       MovieTabChangedEvent event, Emitter<MovieTabbedState> emit) async {
     print("Received MovieTabChangedEvent with index: ${event.currentTabIndex}");
-    Either<AppError, List<MovieEntity>> moviesEither = Right([]); // Khởi tạo với danh sách trống
+    Either<AppError, List<MovieEntity>> moviesEither = Right(
+        []); // Khởi tạo với danh sách trống
 
     switch (event.currentTabIndex) {
       case 0:
@@ -45,9 +46,19 @@ class MovieTabbedBloc extends Bloc<MovieTabbedEvent, MovieTabbedState> {
         moviesEither = await getComingSoon(NoParams());
         break;
     }
+    // emit(
+    //   MovieTabLoadError(
+    //     currentTabIndex: event.currentTabIndex,
+    //     errorType: AppErrorType.network,
+    //   ),
+    // );
+
 
     emit(moviesEither.fold(
-          (l) => MovieTabLoadError(currentTabIndex: event.currentTabIndex),
+          (l) => MovieTabLoadError(
+            currentTabIndex: event.currentTabIndex,
+            errorType: l.appErrorType,
+          ),
           (movies) => MovieTabChanged(
         currentTabIndex: event.currentTabIndex,
         movies: movies,
@@ -55,3 +66,4 @@ class MovieTabbedBloc extends Bloc<MovieTabbedEvent, MovieTabbedState> {
     ));
   }
 }
+

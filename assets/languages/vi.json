@@ -7,6 +7,10 @@
   "now": "HIỆN TẠI",
   "soon": "SẮP CÓ",
   "okay": "Đồng ý",
-  "aboutDescription": "Ứng dụng này sử dụng TMDb API nhưng không thuộc sở hữu hoặc được chứng nhận bởi TMDb"
+  "retry": "Thử lại",
+  "somethingWentWrong": "Đã xảy ra lỗi...",
+  "checkNetwork": "Vui lòng kiểm tra kết nối mạng và nhấn nút Thử lại hoặc gửi lỗi bằng cách nhấn nút Phản hồi.",
+  "aboutDescription": "Ứng dụng này sử dụng TMDb API nhưng không thuộc sở hữu hoặc được chứng nhận bởi TMDb",
+  "noMovies": "Rất tiếc, không có phim nào trong mục này"
 
 }

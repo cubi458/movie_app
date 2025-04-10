@@ -12,7 +12,7 @@ import 'package:movie_app/presentation/blocs/movie_backdrop/movie_backdrop_bloc.
 import 'package:movie_app/presentation/blocs/movie_carousel/movie_carousel_bloc.dart';
 import 'package:movie_app/presentation/blocs/movie_tabbed/movie_tabbed_bloc.dart';
 
-import '../data/repositories/movie_repository_imple.dart';
+import '../data/repositories/movie_repository_impl.dart';
 import '../domain/repositores/movie_repository.dart';
 
 final getItInstance = GetIt.I;
