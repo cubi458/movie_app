@@ -1,5 +1,6 @@
 import 'package:http/http.dart';
 import 'package:movie_app/data/core/api_constants.dart';
+import 'package:movie_app/data/models/movie_detail_model.dart';
 import 'package:movie_app/data/models/movie_model.dart';
 import 'package:movie_app/data/models/movies_result_model.dart';
 import 'dart:convert'; // Thêm để sử dụng json.decode()
@@ -13,6 +14,7 @@ abstract class MovieRemoteDataSource{
   Future<List<MovieModel>> getPopular();
   Future<List<MovieModel>> getPlayingNow();
   Future<List<MovieModel>> getComingSoon();
+  Future<MovieDetailModel> getMovieDetail(int id);
 }
 class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
   final ApiClient _client;
@@ -48,5 +50,13 @@ class MovieRemoteDataSourceImpl extends MovieRemoteDataSource {
     final movies = MoviesResultModel.fromJson(response).movies;
     print(movies);
     return movies;
+  }
+
+  @override
+  Future<MovieDetailModel> getMovieDetail(int id) async{
+    final response = await _client.get('movie/$id');
+    final movie = MovieDetailModel.fromJson(response);
+    print(movie);
+    return movie;
   }
 }

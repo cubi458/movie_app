@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:movie_app/domain/entities/app_error.dart';
+import 'package:movie_app/domain/entities/movie_detail_entity.dart';
 import 'package:movie_app/domain/entities/movie_entity.dart';
-import '../../domain/repositores/movie_repository.dart';
+import '../../domain/repositories/movie_repository.dart';
 import '../data_sources/movie_remote_data_source.dart';
+import '../models/movie_detail_model.dart';
 
 class MovieRepositoryImpl extends MovieRepository {
   final MovieRemoteDataSource remoteDataSource; // ✅ Thêm biến thành viên
@@ -55,6 +57,19 @@ class MovieRepositoryImpl extends MovieRepository {
     } on SocketException{
       return Left(AppError(AppErrorType.network));
     } on Exception{
+      return Left(AppError(AppErrorType.api));
+    }
+  }
+
+  @override
+  Future<Either<AppError, MovieDetailModel>> getMovieDetail(int id) async {
+    try {
+      // Truyền id vào phương thức getMovieDetail của remoteDataSource
+      final movie = await remoteDataSource.getMovieDetail(id);
+      return Right(movie);
+    } on SocketException {
+      return Left(AppError(AppErrorType.network));
+    } on Exception {
       return Left(AppError(AppErrorType.api));
     }
   }

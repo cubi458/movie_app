@@ -9,7 +9,7 @@ import 'package:movie_app/data/data_sources/movie_remote_data_source.dart';
 import 'package:movie_app/data/repositories/movie_repository_impl.dart';
 import 'package:movie_app/domain/entities/movie_entity.dart';
 import 'package:movie_app/domain/entities/no_params.dart';
-import 'package:movie_app/domain/repositores/movie_repository.dart';
+import 'package:movie_app/domain/repositories/movie_repository.dart';
 import 'package:movie_app/presentation/movie_app.dart';
 import 'domain/entities/app_error.dart';
 import 'domain/usecases/get_trending.dart';
