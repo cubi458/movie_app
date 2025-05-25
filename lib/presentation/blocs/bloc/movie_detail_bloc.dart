@@ -17,22 +17,17 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
 
   MovieDetailBloc({
     required this.getMovieDetail,
-  }) : super(MovieDetailInitial());
-
-  @override
-  Stream<MovieDetailState> mapEventToState(
-      MovieDetailEvent event,
-      ) async* {
-    if (event is MovieDetailLoadEvent) {
+  }) : super(MovieDetailInitial()) {
+    on<MovieDetailLoadEvent>((event, emit) async {
       final Either<AppError, MovieDetailEntity> eitherResponse =
       await getMovieDetail(
         MovieParams(event.movieId),
       );
 
-      yield eitherResponse.fold(
-            (l) => MovieDetailError(),
-            (r) => MovieDetailLoaded(r),
+      eitherResponse.fold(
+            (failure) => emit(MovieDetailError()),
+            (movieDetail) => emit(MovieDetailLoaded(movieDetail)),
       );
-    }
+    });
   }
 }

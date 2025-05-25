@@ -5,6 +5,9 @@ import 'package:movie_app/common/extensions/size_extensions.dart';
 import 'package:movie_app/common/extensions/string_extensions.dart';
 import 'package:movie_app/data/core/api_constants.dart';
 
+import '../../movie_detail/movie_detail_arguments.dart';
+import '../../movie_detail/movie_detail_screen.dart';
+
 class MovieTabCardWidget extends StatelessWidget {
   final int movieId;
   final String title, posterPath;
@@ -19,7 +22,15 @@ class MovieTabCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) =>
+                MovieDetailScreen(
+                    movieDetailArguments: MovieDetailArguments(movieId)),
+          ),
+        );
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
