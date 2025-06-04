@@ -1,78 +1,85 @@
-import 'package:movie_app/domain/entities/movie_entity.dart';
+import '../../domain/entities/movie_entity.dart';
 
 class MovieModel extends MovieEntity {
-  final String originalTitle;  // Thêm dòng này
-  final String mediaType;
-  final bool adult;
-  final String originalLanguage;
-  final List<int> genreIds;
-  final double popularity;
-  final bool video;
-  final int voteCount;
+  final int id;
+  final bool? video;
+  final int? voteCount;
+  final double? voteAverage;
+  final String title;
+  final String? releaseDate;
+  final String? originalLanguage;
+  final String? originalTitle;
+  final List<int>? genreIds;
+  final String backdropPath;
+  final bool? adult;
+  final String? overview;
+  final String posterPath;
+  final double? popularity;
+  final String? mediaType;
 
-  const MovieModel({
-    required int id,
-    required String title,
-    required this.originalTitle,  // Cập nhật constructor
-    required String overview,
-    required String posterPath,
-    required String backdropPath,
-    required this.mediaType,
-    required this.adult,
-    required this.originalLanguage,
-    required this.genreIds,
-    required this.popularity,
-    required String releaseDate,
-    required this.video,
-    required double voteAverage,
-    required this.voteCount,
+  MovieModel({
+    required this.id,
+    this.video,
+    this.voteCount,
+    this.voteAverage,
+    required this.title,
+    this.releaseDate,
+    this.originalLanguage,
+    this.originalTitle,
+    this.genreIds,
+    required this.backdropPath,
+    this.adult,
+    this.overview,
+    required this.posterPath,
+    this.popularity,
+    this.mediaType,
   }) : super(
-    id: id,
-    title: title,
-    backdropPath: backdropPath,
-    voteAverage: voteAverage,
-    releaseDate: releaseDate,
-    overview: overview,
-    posterPath: posterPath,
-  );
+          id: id,
+          title: title,
+          backdropPath: backdropPath,
+          posterPath: posterPath,
+          releaseDate: releaseDate,
+          voteAverage: voteAverage,
+          overview: overview,
+        );
 
   factory MovieModel.fromJson(Map<String, dynamic> json) {
     return MovieModel(
-      id: json['id'],
-      title: json['title'] ?? '',
-      originalTitle: json['original_title'] ?? '',
-      overview: json['overview'] ?? '',
+      popularity: json['popularity']?.toDouble() ?? 0.0,
+      voteCount: json['vote_count'],
+      video: json['video'],
       posterPath: json['poster_path'] ?? '',
+      id: json['id'] ?? -1,
+      adult: json['adult'],
       backdropPath: json['backdrop_path'] ?? '',
-      mediaType: json['media_type'] ?? '',
-      adult: json['adult'] ?? false,
-      originalLanguage: json['original_language'] ?? '',
-      genreIds: (json['genre_ids'] as List<dynamic>?)?.map((e) => e as int).toList() ?? [],
-      popularity: (json['popularity'] ?? 0).toDouble(),
-      releaseDate: json['release_date'] ?? '',
-      video: json['video'] ?? false,
-      voteAverage: (json['vote_average'] ?? 0).toDouble(),
-      voteCount: json['vote_count'] ?? 0,
+      originalLanguage: json['original_language'],
+      originalTitle: json['original_title'],
+      genreIds: json['genre_ids'].cast<int>(),
+      title: json['title'] ?? '',
+      voteAverage: json['vote_average']?.toDouble() ?? 0.0,
+      overview: json['overview'],
+      releaseDate: json['release_date'],
+      mediaType: json['media_type'],
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'original_title': originalTitle,
-      'overview': overview,
-      'poster_path': posterPath,
-      'backdrop_path': backdropPath,
-      'media_type': mediaType,
-      'adult': adult,
-      'original_language': originalLanguage,
-      'genre_ids': genreIds,
-      'popularity': popularity,
-      'release_date': releaseDate,
-      'video': video,
-      'vote_average': voteAverage,
-      'vote_count': voteCount,
-    };
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['video'] = this.video;
+    data['vote_count'] = this.voteCount;
+    data['vote_average'] = this.voteAverage;
+    data['title'] = this.title;
+    data['release_date'] = this.releaseDate;
+    data['original_language'] = this.originalLanguage;
+    data['original_title'] = this.originalTitle;
+    data['genre_ids'] = this.genreIds;
+    data['backdrop_path'] = this.backdropPath;
+    data['adult'] = this.adult;
+    data['overview'] = this.overview;
+    data['poster_path'] = this.posterPath;
+    data['popularity'] = this.popularity;
+    data['media_type'] = this.mediaType;
+    return data;
   }
 }

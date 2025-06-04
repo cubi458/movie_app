@@ -5,10 +5,8 @@ import '../../../../common/constants/size_constants.dart';
 import '../../../../common/extensions/size_extensions.dart';
 import '../../../../common/screenutil/screenutil.dart';
 import '../../../../domain/entities/movie_entity.dart';
-
-import '../../../blocs/movie_backdrop/movie_backdrop_bloc.dart';
+import '../../../blocs/movie_backdrop/movie_backdrop_cubit.dart';
 import 'animated_movie_card_widget.dart';
-import 'movie_card_widget.dart';
 
 class MoviePageView extends StatefulWidget {
   final List<MovieEntity> movies;
@@ -17,8 +15,8 @@ class MoviePageView extends StatefulWidget {
   const MoviePageView({
     Key? key,
     required this.movies,
-    required this.initialPage,
-  }) : assert(initialPage >= 0, 'initialPage cannot be less than 0'),
+    this.initialPage = 0,
+  })  : assert(initialPage >= 0, 'initialPage cannot be less than 0'),
         super(key: key);
 
   @override
@@ -26,7 +24,7 @@ class MoviePageView extends StatefulWidget {
 }
 
 class _MoviePageViewState extends State<MoviePageView> {
-  late PageController _pageController;
+  late PageController? _pageController;
 
   @override
   void initState() {
@@ -40,38 +38,32 @@ class _MoviePageViewState extends State<MoviePageView> {
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _pageController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: Sizes.dimen_0.h.toDouble()),
+      margin: EdgeInsets.symmetric(vertical: Sizes.dimen_10.h),
       height: ScreenUtil.screenHeight * 0.35,
       child: PageView.builder(
         controller: _pageController,
         itemBuilder: (context, index) {
-          final movie = widget.movies[index];
-          debugPrint('Building page for: ${movie.title}');
-
+          final MovieEntity movie = widget.movies[index];
           return AnimatedMovieCardWidget(
             index: index,
-            pageController: _pageController,
+            pageController: _pageController!,
             movieId: movie.id,
             posterPath: movie.posterPath,
           );
         },
         pageSnapping: true,
-        itemCount: widget.movies?.length ?? 0,
+        itemCount: widget.movies.length,
         onPageChanged: (index) {
-          debugPrint('📢 Changing backdrop to: ${widget.movies[index].backdropPath}');
-
-          BlocProvider.of<MovieBackdropBloc>(context).add(
-            MovieBackdropChangedEvent(widget.movies[index]),
-          );
+          BlocProvider.of<MovieBackdropCubit>(context)
+              .backdropChanged(widget.movies[index]);
         },
-
       ),
     );
   }

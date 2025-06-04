@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/common/extensions/size_extensions.dart';
-import 'package:movie_app/domain/entities/movie_entity.dart';
+import '../../../../common/constants/size_constants.dart';
+import '../../../../common/extensions/size_extensions.dart';
+
+import '../../../../domain/entities/movie_entity.dart';
 import 'movie_tab_card_widget.dart';
 
 class MovieListViewBuilder extends StatelessWidget {
   final List<MovieEntity> movies;
 
-  const MovieListViewBuilder({
-    Key? key, // ✅ Hỗ trợ null safety
-    required this.movies, // ✅ Thay @required bằng required
-  }) : super(key: key);
+  const MovieListViewBuilder({Key? key, required this.movies})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 6.h.toDouble()), // ✅ Ép kiểu num -> double
+      padding: EdgeInsets.symmetric(vertical: Sizes.dimen_6.h),
       child: ListView.separated(
         shrinkWrap: true,
         itemCount: movies.length,
         scrollDirection: Axis.horizontal,
         separatorBuilder: (context, index) {
           return SizedBox(
-            width: 14.w.toDouble(), // ✅ Ép kiểu num -> double
+            width: Sizes.dimen_14.w,
           );
         },
         itemBuilder: (context, index) {

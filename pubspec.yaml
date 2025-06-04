@@ -29,9 +29,9 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
-
     sdk: flutter
 
+  hive: ^2.2.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -47,10 +47,15 @@ dependencies:
   flutter_svg: ^2.0.17
   cached_network_image: ^3.4.1
   flutter_localization: ^0.3.1
+  flutter_inappwebview: ^6.0.0-beta.22
   wiredash: ^2.4.0
+  youtube_player_flutter: ^9.1.1
+  flare_flutter: ^3.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  pedantic: ^1.11.1
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

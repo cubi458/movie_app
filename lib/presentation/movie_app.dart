@@ -1,76 +1,138 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/common/constants/languages.dart';
-import 'package:movie_app/common/screenutil/screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:movie_app/di/get_it.dart';
-import 'package:movie_app/presentation/app_localizations.dart';
-import 'package:movie_app/presentation/blocs/language/language_bloc.dart';
-import 'package:movie_app/presentation/journeys/home/home_screen.dart';
-import 'package:movie_app/presentation/themes/theme_color.dart';
-import 'package:movie_app/presentation/themes/theme_text.dart';
-import 'package:movie_app/presentation/wiredash_app.dart';
+import 'blocs/theme/theme_cubit.dart';
+
+import '../common/constants/languages.dart';
+import '../common/constants/route_constants.dart';
+import '../common/screenutil/screenutil.dart';
+import '../di/get_it.dart';
+import 'app_localizations.dart';
+import 'blocs/language/language_cubit.dart';
+import 'blocs/loading/loading_cubit.dart';
+import 'blocs/login/login_cubit.dart';
+import 'fade_page_route_builder.dart';
+import 'journeys/loading/loading_screen.dart';
+import 'routes.dart';
+import 'themes/theme_color.dart';
+import 'themes/theme_text.dart';
+import 'wiredash_app.dart';
 
 class MovieApp extends StatefulWidget {
   @override
-  State<MovieApp> createState() => _MovieAppState();
+  _MovieAppState createState() => _MovieAppState();
 }
 
 class _MovieAppState extends State<MovieApp> {
-  late LanguageBloc _languageBloc;
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  late LanguageCubit _languageCubit;
+  late LoginCubit _loginBloc;
+  late LoadingCubit _loadingCubit;
+  late ThemeCubit _themeCubit;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _languageBloc = getItInstance<LanguageBloc>();
+    _languageCubit = getItInstance<LanguageCubit>();
+    _languageCubit.loadPreferredLanguage();
+    _loginBloc = getItInstance<LoginCubit>();
+    _loadingCubit = getItInstance<LoadingCubit>();
+    _themeCubit = getItInstance<ThemeCubit>();
+    _themeCubit.loadPreferredTheme();
   }
 
   @override
   void dispose() {
-    _languageBloc.close();
+    _languageCubit.close();
+    _loginBloc.close();
+    _loadingCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init();
-
-    return BlocProvider<LanguageBloc>.value(
-      value: _languageBloc,
-      child: BlocBuilder<LanguageBloc, LanguageState>(
-        builder: (context, state) {
-          if(state is LanguageLoaded){
-            print('🟢 current languageCode: ${state.locale.languageCode}');
-            return WiredashApp(
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Movie App',
-                theme: ThemeData(
-                  unselectedWidgetColor: AppColor.royalBlue,
-                  primaryColor: AppColor.vulcan,
-                  scaffoldBackgroundColor: AppColor.vulcan,
-                  visualDensity: VisualDensity.adaptivePlatformDensity,
-                  textTheme: ThemeText.getTextTheme(),
-                  appBarTheme: const AppBarTheme(elevation: 0),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<LanguageCubit>.value(value: _languageCubit),
+        BlocProvider<LoginCubit>.value(value: _loginBloc),
+        BlocProvider<LoadingCubit>.value(value: _loadingCubit),
+        BlocProvider<ThemeCubit>.value(value: _themeCubit),
+      ],
+      child: BlocBuilder<ThemeCubit, Themes>(
+        builder: (context, theme) {
+          return BlocBuilder<LanguageCubit, Locale>(
+            builder: (context, locale) {
+              return WiredashApp(
+                navigatorKey: _navigatorKey,
+                languageCode: locale.languageCode,
+                child: MaterialApp(
+                  navigatorKey: _navigatorKey,
+                  debugShowCheckedModeBanner: false,
+                  title: 'Movie App',
+                  theme: ThemeData(
+                    unselectedWidgetColor: AppColor.royalBlue,
+                    primaryColor:
+                    theme == Themes.dark ? AppColor.vulcan : Colors.white,
+                    scaffoldBackgroundColor:
+                    theme == Themes.dark ? AppColor.vulcan : Colors.white,
+                    brightness: theme == Themes.dark
+                        ? Brightness.dark
+                        : Brightness.light,
+                    colorScheme: theme == Themes.dark
+                        ? ColorScheme.dark().copyWith(secondary: AppColor.royalBlue)
+                        : ColorScheme.light().copyWith(secondary: AppColor.royalBlue),
+                    cardTheme: CardTheme(
+                      color:
+                      theme == Themes.dark ? Colors.white : AppColor.vulcan,
+                    ),
+                    visualDensity: VisualDensity.adaptivePlatformDensity,
+                    textTheme: theme == Themes.dark
+                        ? ThemeText.getTextTheme()
+                        : ThemeText.getLightTextTheme(),
+                    appBarTheme: const AppBarTheme(elevation: 0),
+                    inputDecorationTheme: InputDecorationTheme(
+                      hintStyle: Theme.of(context).textTheme.greySubtitle1,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: theme == Themes.dark
+                              ? Colors.white
+                              : AppColor.vulcan,
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey)),
+                    ),
+                  ),
+                  supportedLocales:
+                  Languages.languages.map((e) => Locale(e.code)).toList(),
+                  locale: locale,
+                  localizationsDelegates: [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                  ],
+                  builder: (context, child) {
+                    return LoadingScreen(
+                      screen: child!,
+                    );
+                  },
+                  initialRoute: RouteList.initial,
+                  onGenerateRoute: (RouteSettings settings) {
+                    final routes = Routes.getRoutes(settings);
+                    final WidgetBuilder? builder = routes[settings.name];
+                    return FadePageRouteBuilder(
+                      builder: builder!,
+                      settings: settings,
+                    );
+                  },
                 ),
-                supportedLocales: Languages.languages.map((e) => Locale(e.code)).toList(),
-                locale: state.locale,
-                localizationsDelegates: [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate, // ✅ thêm dòng này
-                ],
-                home: HomeScreen(),
-              ),
-              languageCode: state.locale.languageCode,
-
-            );
-          }
-          return const SizedBox.shrink();
-        }
+              );
+            },
+          );
+        },
       ),
     );
   }
 }
+

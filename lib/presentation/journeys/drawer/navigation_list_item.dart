@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/common/constants/size_constants.dart';
-import 'package:movie_app/common/extensions/size_extensions.dart';
+
+import '../../../common/constants/size_constants.dart';
+import '../../../common/extensions/size_extensions.dart';
 
 class NavigationListItem extends StatelessWidget {
   final String title;
-  final VoidCallback onPressed; // Thay từ Function thành VoidCallback
+  final Function() onPressed;
 
   const NavigationListItem({
-    Key? key, // Sửa Key thành Key? vì null safety
+    Key? key,
     required this.title,
-    required this.onPressed, // Sửa @required thành required
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -28,7 +29,7 @@ class NavigationListItem extends StatelessWidget {
         child: ListTile(
           title: Text(
             title,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white), // Thay subtitle1 bằng bodyMedium
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
       ),
@@ -38,12 +39,12 @@ class NavigationListItem extends StatelessWidget {
 
 class NavigationSubListItem extends StatelessWidget {
   final String title;
-  final VoidCallback onPressed; // Thay từ Function thành VoidCallback
+  final Function() onPressed;
 
   const NavigationSubListItem({
-    Key? key, // Sửa Key thành Key? vì null safety
+    Key? key,
     required this.title,
-    required this.onPressed, // Sửa @required thành required
+    required this.onPressed,
   }) : super(key: key);
 
   @override
@@ -60,10 +61,10 @@ class NavigationSubListItem extends StatelessWidget {
           ],
         ),
         child: ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: Sizes.dimen_32.w.toDouble()), // Ép kiểu thành double
+          contentPadding: EdgeInsets.symmetric(horizontal: Sizes.dimen_32.w),
           title: Text(
             title,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white), // Thay subtitle1 bằng bodyMedium
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
       ),

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/common/constants/size_constants.dart';
-import 'package:movie_app/common/constants/translation_constants.dart';
-import 'package:movie_app/common/extensions/string_extensions.dart';
-import 'package:movie_app/common/extensions/size_extensions.dart';
-import 'package:movie_app/presentation/blocs/movie_tabbed/movie_tabbed_bloc.dart';
-import 'package:movie_app/presentation/journeys/home/movie_tabbed/tab_title_widget.dart';
-import 'package:movie_app/presentation/widgets/app_error_widget.dart';
 
+import '../../../../common/constants/size_constants.dart';
+import '../../../../common/constants/translation_constants.dart';
+import '../../../../common/extensions/size_extensions.dart';
+import '../../../../common/extensions/string_extensions.dart';
+import '../../../blocs/movie_tabbed/movie_tabbed_cubit.dart';
+import '../../../widgets/app_error_widget.dart';
+import '../../loading/loading_circle.dart';
 import 'movie_list_view_builder.dart';
 import 'movie_tabbed_constants.dart';
+import 'tab_title_widget.dart';
 
 class MovieTabbedWidget extends StatefulWidget {
   @override
@@ -18,15 +19,15 @@ class MovieTabbedWidget extends StatefulWidget {
 
 class _MovieTabbedWidgetState extends State<MovieTabbedWidget>
     with SingleTickerProviderStateMixin {
-  MovieTabbedBloc get movieTabbedBloc =>
-      BlocProvider.of<MovieTabbedBloc>(context);
+  MovieTabbedCubit get movieTabbedCubit =>
+      BlocProvider.of<MovieTabbedCubit>(context);
 
   int currentTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    movieTabbedBloc.add(MovieTabChangedEvent(currentTabIndex: currentTabIndex));
+    movieTabbedCubit.movieTabChanged(currentTabIndex: currentTabIndex);
   }
 
   @override
@@ -36,12 +37,10 @@ class _MovieTabbedWidgetState extends State<MovieTabbedWidget>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MovieTabbedBloc, MovieTabbedState>(
+    return BlocBuilder<MovieTabbedCubit, MovieTabbedState>(
       builder: (context, state) {
-        print("Current State: ${state.runtimeType}");
         return Padding(
-          padding: EdgeInsets.only(top: Sizes.dimen_4.h.toDouble()),
-          // ✅ Ép kiểu num -> double
+          padding: EdgeInsets.only(top: Sizes.dimen_4.h),
           child: Column(
             children: <Widget>[
               Row(
@@ -60,8 +59,8 @@ class _MovieTabbedWidgetState extends State<MovieTabbedWidget>
                 ],
               ),
               if (state is MovieTabChanged)
-                state.movies?.isEmpty ?? true ?
-                    Expanded(
+                state.movies.isEmpty
+                    ? Expanded(
                         child: Center(
                           child: Text(
                             TranslationConstants.noMovies.t(context),
@@ -69,24 +68,27 @@ class _MovieTabbedWidgetState extends State<MovieTabbedWidget>
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ),
-                    ):
-                Expanded(
-                  child: MovieListViewBuilder(
-                    movies: state.movies ??
-                        [], // ✅ Đảm bảo không truyền null vào danh sách
-                  ),
-                ),
+                      )
+                    : Expanded(
+                        child: MovieListViewBuilder(movies: state.movies),
+                      ),
               if (state is MovieTabLoadError)
                 Expanded(
                   child: AppErrorWidget(
                     errorType: state.errorType,
-                    onPressed: () => movieTabbedBloc.add(
-                        MovieTabChangedEvent(
-                          currentTabIndex: state.currentTabIndex ?? 0,
-                        )
+                    onPressed: () => movieTabbedCubit.movieTabChanged(
+                      currentTabIndex: state.currentTabIndex,
                     ),
                   ),
-                )
+                ),
+              if (state is MovieTabLoading)
+                Expanded(
+                  child: Center(
+                    child: LoadingCircle(
+                      size: Sizes.dimen_100.w,
+                    ),
+                  ),
+                ),
             ],
           ),
         );
@@ -95,6 +97,6 @@ class _MovieTabbedWidgetState extends State<MovieTabbedWidget>
   }
 
   void _onTabTapped(int index) {
-    movieTabbedBloc.add(MovieTabChangedEvent(currentTabIndex: index));
+    movieTabbedCubit.movieTabChanged(currentTabIndex: index);
   }
 }

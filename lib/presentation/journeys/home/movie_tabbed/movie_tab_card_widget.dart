@@ -1,20 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/common/constants/size_constants.dart';
-import 'package:movie_app/common/extensions/size_extensions.dart';
-import 'package:movie_app/common/extensions/string_extensions.dart';
-import 'package:movie_app/data/core/api_constants.dart';
 
+import '../../../../common/constants/route_constants.dart';
+import '../../../../common/constants/size_constants.dart';
+import '../../../../common/extensions/size_extensions.dart';
+import '../../../../common/extensions/string_extensions.dart';
+import '../../../../data/core/api_constants.dart';
 import '../../movie_detail/movie_detail_arguments.dart';
-import '../../movie_detail/movie_detail_screen.dart';
 
 class MovieTabCardWidget extends StatelessWidget {
   final int movieId;
   final String title, posterPath;
 
   const MovieTabCardWidget({
-    Key? key, // ✅ Sửa Key? thay vì Key (do null safety)
-    required this.movieId, // ✅ Dùng required thay vì @required
+    Key? key,
+    required this.movieId,
     required this.title,
     required this.posterPath,
   }) : super(key: key);
@@ -23,12 +23,9 @@ class MovieTabCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) =>
-                MovieDetailScreen(
-                    movieDetailArguments: MovieDetailArguments(movieId)),
-          ),
+        Navigator.of(context).pushNamed(
+          RouteList.movieDetail,
+          arguments: MovieDetailArguments(movieId),
         );
       },
       child: Column(
@@ -36,7 +33,7 @@ class MovieTabCardWidget extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(Sizes.dimen_16.w.toDouble()), // ✅ Ép kiểu num -> double
+              borderRadius: BorderRadius.circular(Sizes.dimen_16.w),
               child: CachedNetworkImage(
                 imageUrl: '${ApiConstants.BASE_IMAGE_URL}$posterPath',
                 fit: BoxFit.cover,
@@ -44,12 +41,12 @@ class MovieTabCardWidget extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: Sizes.dimen_4.h.toDouble()), // ✅ Ép kiểu num -> double
+            padding: EdgeInsets.only(top: Sizes.dimen_4.h),
             child: Text(
               title.intelliTrim(),
               maxLines: 1,
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white), // ✅ Đổi màu chữ thành trắng
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
         ],

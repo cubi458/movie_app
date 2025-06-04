@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/presentation/journeys/drawer/navigation_list_item.dart';
+
+import 'navigation_list_item.dart';
 
 class NavigationExpandedListItem extends StatelessWidget {
   final String title;
-  final ValueChanged<int> onPressed; // ✅ sửa lại kiểu đúng
+  final Function(int index) onPressed;
   final List<String> children;
 
   const NavigationExpandedListItem({
@@ -27,13 +28,13 @@ class NavigationExpandedListItem extends StatelessWidget {
       child: ExpansionTile(
         title: Text(
           title,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         children: [
           for (int i = 0; i < children.length; i++)
             NavigationSubListItem(
               title: children[i],
-              onPressed: () => onPressed(i), // ✅ gọi callback đúng cách
+              onPressed: () => onPressed(i),
             ),
         ],
       ),

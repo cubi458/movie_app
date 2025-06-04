@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/domain/entities/movie_entity.dart';
-import 'package:movie_app/presentation/widgets/movie_app_bar.dart';
 
-// import 'movie_backdrop_widget.dart';
-// import 'movie_data_widget.dart';
-// import 'separator.dart';
+import '../../../../domain/entities/movie_entity.dart';
+import '../../../widgets/movie_app_bar.dart';
 import '../../../widgets/separator.dart';
+import 'movie_backdrop_widget.dart';
 import 'movie_data_widget.dart';
 import 'movie_page_view.dart';
 
@@ -16,7 +14,7 @@ class MovieCarouselWidget extends StatelessWidget {
   const MovieCarouselWidget({
     Key? key,
     required this.movies,
-    required this.defaultIndex,
+    this.defaultIndex = 0,
   })  : assert(defaultIndex >= 0, 'defaultIndex cannot be less than 0'),
         super(key: key);
 
@@ -25,10 +23,10 @@ class MovieCarouselWidget extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // MovieBackdropWidget(),
+        MovieBackdropWidget(),
         Column(
           children: [
-             MovieAppBar(),
+            MovieAppBar(),
             MoviePageView(
               movies: movies,
               initialPage: defaultIndex,

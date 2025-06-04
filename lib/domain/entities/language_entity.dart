@@ -1,4 +1,4 @@
-class LanguageEntity{
+class LanguageEntity {
   final String code;
   final String value;
 

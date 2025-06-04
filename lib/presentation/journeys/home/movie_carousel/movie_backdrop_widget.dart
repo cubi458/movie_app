@@ -3,11 +3,13 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app/common/constants/size_constants.dart';
-import 'package:movie_app/common/screenutil/screenutil.dart';
-import 'package:movie_app/common/extensions/size_extensions.dart';
-import 'package:movie_app/data/core/api_constants.dart';
-import 'package:movie_app/presentation/blocs/movie_backdrop/movie_backdrop_bloc.dart';
+
+import '../../../../common/constants/size_constants.dart';
+import '../../../../common/extensions/size_extensions.dart';
+import '../../../../common/screenutil/screenutil.dart';
+import '../../../../data/core/api_constants.dart';
+import '../../../../domain/entities/movie_entity.dart';
+import '../../../blocs/movie_backdrop/movie_backdrop_cubit.dart';
 
 class MovieBackdropWidget extends StatelessWidget {
   @override
@@ -17,34 +19,20 @@ class MovieBackdropWidget extends StatelessWidget {
       heightFactor: 0.7,
       child: ClipRRect(
         borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(Sizes.dimen_40.w.toDouble()),
+          bottom: Radius.circular(Sizes.dimen_40.w),
         ),
         child: Stack(
           children: <Widget>[
             FractionallySizedBox(
               heightFactor: 1,
               widthFactor: 1,
-              child: BlocBuilder<MovieBackdropBloc, MovieBackdropState>(
-                builder: (context, state) {
-                  debugPrint("Current backdrop state: $state"); // ✅ Kiểm tra state
-
-                  if (state is MovieBackdropChanged) {
-                    return AnimatedSwitcher(
-                      duration: Duration(milliseconds: 600), // Thời gian chuyển đổi mượt mà
-                      transitionBuilder: (Widget child, Animation<double> animation) {
-                        return FadeTransition(opacity: animation, child: child);
-                      },
-                      child: CachedNetworkImage(
-                        key: ValueKey<String>(state.movie.backdropPath!), // Giúp Flutter nhận diện ảnh mới
-                        imageUrl: '${ApiConstants.BASE_IMAGE_URL}${state.movie.backdropPath}',
-                        fit: BoxFit.cover, // Đảm bảo ảnh fill đủ khung
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    );
-
-                  }
-                  return const SizedBox.shrink();
+              child: BlocBuilder<MovieBackdropCubit, MovieEntity?>(
+                builder: (context, movie) {
+                  return CachedNetworkImage(
+                    imageUrl:
+                        '${ApiConstants.BASE_IMAGE_URL}${movie?.backdropPath}',
+                    fit: BoxFit.fitHeight,
+                  );
                 },
               ),
             ),

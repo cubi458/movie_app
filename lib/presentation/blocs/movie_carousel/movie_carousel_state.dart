@@ -1,4 +1,4 @@
-part of 'movie_carousel_bloc.dart';
+part of 'movie_carousel_cubit.dart';
 
 abstract class MovieCarouselState extends Equatable {
   const MovieCarouselState();
@@ -8,8 +8,6 @@ abstract class MovieCarouselState extends Equatable {
 }
 
 class MovieCarouselInitial extends MovieCarouselState {}
-
-class MovieCarouselLoading extends MovieCarouselState {} // Thêm trạng thái loading
 
 class MovieCarouselError extends MovieCarouselState {
   final AppErrorType errorType;

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/common/constants/size_constants.dart';
-import 'package:movie_app/common/constants/translation_constants.dart';
-import 'package:movie_app/common/extensions/size_extensions.dart';
-import 'package:movie_app/common/extensions/string_extensions.dart';
-import 'package:movie_app/domain/entities/app_error.dart';
 import 'package:wiredash/wiredash.dart';
 
+import '../../common/constants/size_constants.dart';
+import '../../common/constants/translation_constants.dart';
+import '../../common/extensions/size_extensions.dart';
+import '../../common/extensions/string_extensions.dart';
+import '../../domain/entities/app_error.dart';
 import 'button.dart';
 
 class AppErrorWidget extends StatelessWidget {
   final AppErrorType errorType;
-  final VoidCallback onPressed; // ✅ Sửa Function -> VoidCallback
+  final Function() onPressed;
 
   const AppErrorWidget({
-    Key? key, // ✅ Hỗ trợ null safety
+    Key? key,
     required this.errorType,
     required this.onPressed,
   }) : super(key: key);
@@ -21,7 +21,7 @@ class AppErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_32.w.toDouble()), // ✅ Ép kiểu num -> double
+      padding: EdgeInsets.symmetric(horizontal: Sizes.dimen_32.w),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +40,7 @@ class AppErrorWidget extends StatelessWidget {
                 text: TranslationConstants.retry,
               ),
               Button(
-                onPressed: () => Wiredash.of(context).show(),
+                onPressed: () => Wiredash.of(context)?.show(),
                 text: TranslationConstants.feedback,
               ),
             ],

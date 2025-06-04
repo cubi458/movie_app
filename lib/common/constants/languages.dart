@@ -1,6 +1,6 @@
-import 'package:movie_app/domain/entities/language_entity.dart';
+import '../../domain/entities/language_entity.dart';
 
-class Languages{
+class Languages {
   const Languages._();
 
   static const languages = [

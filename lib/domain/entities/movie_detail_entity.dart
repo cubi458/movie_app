@@ -1,24 +1,24 @@
 import 'package:equatable/equatable.dart';
 
 class MovieDetailEntity extends Equatable {
-  final int? id;
-  final String? title;
+  final int id;
+  final String title;
   final String? overview;
   final String? releaseDate;
-  final double? voteAverage; // Sửa kiểu dữ liệu ở đây
+  final num? voteAverage;
   final String? backdropPath;
-  final String? posterPath;
+  final String posterPath;
 
-  MovieDetailEntity({
-    this.id,
-    this.title,
-    this.overview,
-    this.releaseDate,
-    this.voteAverage,
-    this.backdropPath,
-    this.posterPath,
+  const MovieDetailEntity({
+    required this.id,
+    required this.title,
+    required this.overview,
+    required this.releaseDate,
+    required this.voteAverage,
+    required this.backdropPath,
+    required this.posterPath,
   });
 
   @override
-  List<Object?> get props => [id, title, overview, releaseDate, voteAverage, backdropPath, posterPath];
+  List<Object> get props => [id];
 }

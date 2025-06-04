@@ -1,17 +1,19 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:movie_app/common/constants/languages.dart';
+
+import '../common/constants/languages.dart';
 
 class AppLocalizations {
   final Locale locale;
 
   AppLocalizations(this.locale);
 
-  static AppLocalizations? of(BuildContext context) =>
+  static AppLocalizations? of(context) =>
       Localizations.of<AppLocalizations>(context, AppLocalizations);
 
-  Map<String, String> _localizedStrings = {}; // ✅ Khởi tạo mặc định
+  late Map<String, String> _localizedStrings;
 
   Future<bool> load() async {
     final jsonString = await rootBundle
@@ -24,12 +26,12 @@ class AppLocalizations {
     return true;
   }
 
-  String? translate(String key) { // ✅ Cho phép null nếu key không tồn tại
+  String? translate(String key) {
     return _localizedStrings[key];
   }
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
-  _AppLocalizationDelegate();
+      _AppLocalizationDelegate();
 }
 
 class _AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {
